@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_map"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="Ver mapa"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_register_bike"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Registrar coche"
+        app:showAsAction="always" />
+</menu>
