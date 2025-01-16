@@ -14,10 +14,16 @@
         android:roundIcon="@mipmap/bike_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bikes"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
         <activity
-            android:name="com.svalero.bikes.MapActivity"
+            android:name="com.svalero.bikes.view.PreferencesActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.svalero.bikes.view.DetailActivityView"
+            android:exported="false" />
+        <activity
+            android:name="com.svalero.bikes.view.MapActivityView"
             android:exported="false" />
         <activity
             android:name="com.svalero.bikes.view.RegisterBikeView"

@@ -1,5 +1,8 @@
 package com.svalero.bikes.adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikes.R;
 import com.svalero.bikes.domain.Bike;
+import com.svalero.bikes.view.DetailActivityView;
 
 import org.w3c.dom.Text;
 
@@ -53,6 +57,14 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeHolder> {
 
             brand = itemView.findViewById(R.id.item_brand);
             model = itemView.findViewById(R.id.item_model);
+
+            itemView.setOnClickListener(view -> {
+                long bikeId = bikeList.get(getAdapterPosition()).getId();
+
+                Intent intent = new Intent(itemView.getContext(), DetailActivityView.class);
+                intent.putExtra("bikeId", bikeId);
+                startActivity(itemView.getContext(), intent, null);
+            });
         }
     }
 }

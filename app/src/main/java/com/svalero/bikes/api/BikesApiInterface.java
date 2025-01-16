@@ -15,6 +15,9 @@ public interface BikesApiInterface {
     @GET("bikes")
     Call<List<Bike>> getBikes();
 
+    @GET("bikes/{id}")
+    Call<Bike>getBike(@Path("id")int id);
+
     @POST("users/{userId}/bikes")
     Call<Bike> addBike(@Path ("userId") long userId, @Body Bike bike);
 }

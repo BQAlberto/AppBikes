@@ -1,9 +1,13 @@
 package com.svalero.bikes.domain;
 
-import java.time.LocalDate;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
-public class Bike {
+public class Bike implements Parcelable {
 
     private long id;
     private String brand;
@@ -21,6 +25,28 @@ public class Bike {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    protected Bike(Parcel in) {
+        id = in.readLong();
+        brand = in.readString();
+        model = in.readString();
+        color = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+    }
+
+    public static final Creator<Bike> CREATOR = new Creator<Bike>() {
+        @Override
+        public Bike createFromParcel(Parcel in) {
+            return new Bike(in);
+        }
+
+        @Override
+        public Bike[] newArray(int size) {
+            return new Bike[size];
+        }
+    };
+
 
     public long getId() {
         return id;
@@ -54,9 +80,7 @@ public class Bike {
         return color;
     }
 
-    public void setMaxSpeed(String color) {
-        this.color = color;
-    }
+    public void setColor(String color){this.color = color;}
 
     public double getLatitude() {
         return latitude;
@@ -72,5 +96,20 @@ public class Bike {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(brand);
+        dest.writeString(model);
+        dest.writeString(color);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 }

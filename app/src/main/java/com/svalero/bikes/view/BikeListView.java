@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bikes.R;
-import com.svalero.bikes.MapActivity;
 import com.svalero.bikes.adapter.BikeAdapter;
 import com.svalero.bikes.contract.BikeListContract;
 import com.svalero.bikes.domain.Bike;
@@ -25,7 +24,7 @@ import java.util.List;
 public class BikeListView extends AppCompatActivity implements BikeListContract.View {
 
     private BikeAdapter bikeAdapter;
-    private List<Bike> bikeList;
+    private ArrayList<Bike> bikeList;
     private BikeListContract.Presenter presenter;
 
     @Override
@@ -44,8 +43,7 @@ public class BikeListView extends AppCompatActivity implements BikeListContract.
 
         bikeAdapter = new BikeAdapter(bikeList);
         bikesView.setAdapter(bikeAdapter);
-
-        }
+    }
 
     @Override
     protected void onResume() {
@@ -64,19 +62,23 @@ public class BikeListView extends AppCompatActivity implements BikeListContract.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             if (item.getItemId() == R.id.action_map) {
-                Intent intent = new Intent(this, MapActivity.class);
+                Intent intent = new Intent(this, MapActivityView.class);
+                intent.putParcelableArrayListExtra("bikeList", bikeList);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.action_register_bike) {
                 Intent intent = new Intent(this, RegisterBikeView.class);
                 startActivity(intent);
+            } else if (item.getItemId() == R.id.action_preferences) {
+                Intent intent =new Intent(this, PreferencesActivity.class);
+                startActivity(intent);
             }
 
-            return true;
+        return true;
         }
 
-        public void registerBike (View view){
-            Intent intent = new Intent(this, RegisterBikeView.class);
-            startActivity(intent);
+    public void registerBike (View view){
+        Intent intent = new Intent(this, RegisterBikeView.class);
+        startActivity(intent);
     }
 
     @Override

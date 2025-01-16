@@ -1,10 +1,16 @@
-package com.svalero.bikes;
+package com.svalero.bikes.view;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.example.bikes.R;
 import com.mapbox.geojson.Point;
@@ -17,10 +23,13 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManagerKt;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
 import com.svalero.bikes.domain.Bike;
-import com.svalero.bikes.view.BikeListView;
+import com.svalero.bikes.util.MapUtil;
 
-public class MapActivity extends AppCompatActivity implements Style.OnStyleLoaded{
+import java.util.ArrayList;
 
+public class MapActivityView extends AppCompatActivity implements Style.OnStyleLoaded {
+
+    private ArrayList<Bike> bikeList;
     private MapView mapView;
     private PointAnnotationManager pointAnnotationManager;
 
@@ -29,27 +38,30 @@ public class MapActivity extends AppCompatActivity implements Style.OnStyleLoade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        mapView = findViewById(R.id.mapView);
-        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS, this);
-        initializePointAnnotationManager();
-    }
+        Intent intent = getIntent();
+        bikeList = intent.getParcelableArrayListExtra("bikeList");
 
-    private void initializePointAnnotationManager() {
-        AnnotationPlugin annotationPlugin = AnnotationPluginImplKt.getAnnotations(mapView);
-        AnnotationConfig annotationConfig = new AnnotationConfig();
-        pointAnnotationManager = PointAnnotationManagerKt.createPointAnnotationManager(
-                annotationPlugin, annotationConfig);
+        mapView = findViewById(R.id.mapView);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String mapType = preferences.getString("preference_map_type", "Calles");
+        if (mapType.equals("Calles")) {
+            mapType = Style.MAPBOX_STREETS;
+        } else if (mapType.equals("Satelite")) {
+            mapType = Style.SATELLITE;
+        }
+        mapView.getMapboxMap().loadStyleUri(mapType, this);
+        pointAnnotationManager = MapUtil.initializePointAnnotationManager(mapView);
     }
 
     private void viewBikes() {
-//        for (Bike bike : BikeListView.bikeList) {
-//            addMarker(bike.getBrand(), bike.getLatitude(), bike.getLongitude());
-//        }
+        for (Bike bike : bikeList) {
+            addMarker(bike.getBrand(), bike.getLatitude(), bike.getLongitude());
+        }
     }
 
     private void addMarker(String message, double latitude, double longitude) {
         PointAnnotationOptions marker = new PointAnnotationOptions()
-                .withIconImage(BitmapFactory.decodeResource(getResources(), R.mipmap.bike))
+                .withIconImage(BitmapFactory.decodeResource(getResources(), R.mipmap.red_marker))
                 .withTextField(message)
                 .withPoint(Point.fromLngLat(longitude, latitude));
         pointAnnotationManager.create(marker);
